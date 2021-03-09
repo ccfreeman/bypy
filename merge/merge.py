@@ -10,7 +10,6 @@ class Merge:
             the sorting an group-finding characterstics of the GroupBy object to facilitate the
             merges, as well as functions from NumPy's setops suite.
         """
-        
         self.l_on = l_on
         self.r_on = r_on
         

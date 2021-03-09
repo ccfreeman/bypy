@@ -6,9 +6,11 @@ def _inner_merge_jit(idx, l_vals, r_vals, n_intersect,
                       l_gr_idx, r_gr_idx, l_idx, r_idx):
     """ Helper jitted function for inner merge """
     # Make the results object of the proper proportions
-    l_counts = np.diff(l_gr_idx)[l_idx] # get counts per group
+    # get counts per group
+    l_counts = np.diff(l_gr_idx)[l_idx] 
     r_counts = np.diff(r_gr_idx)[r_idx]
 
+    # Multiplying these counts elementwise gives us the number of elements for each group
     group_n = l_counts * r_counts
     res_group_i = np.concatenate((np.array([0]), np.cumsum(group_n)))
 
@@ -28,7 +30,7 @@ def _inner_merge_jit(idx, l_vals, r_vals, n_intersect,
         l_arr = l_vals[l_gr_idx[l_idx[i]]:l_gr_idx[l_idx[i]+1]]
         r_arr = r_vals[r_gr_idx[r_idx[i]]:r_gr_idx[r_idx[i]+1]] 
 
-        res_gr = res[res_group_i[i]:res_group_i[i+1]]
+        res_gr = res[res_group_i[i]:res_group_i[i+1]] # Get a view of the rows to be changed at this iteration
 
         res_gr[:, :idx_end] = index
 
