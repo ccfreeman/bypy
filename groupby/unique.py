@@ -22,5 +22,7 @@ def unique(ar, keycols):
     idx = np.concatenate(np.nonzero(mask) + ([mask.size],))
     aret = arv.view(ar.dtype).reshape(ar.shape)
     keys = aret[mask][:, keycols]
+    keyv = arvkey[mask]
     
-    return aret, idx, keys
+    return aret, idx, keys, keyv
+

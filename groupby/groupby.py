@@ -58,14 +58,14 @@ class GroupBy:
     
     def __init__(self, ar, by):
         """ Initialize the groupby object with a 2d array """
-        self.arr, self.gr_idx, self.keys = unique(ar, by)
-        
+        self.arr, self.gr_idx, self.keys, self.keyv = unique(ar, keycols=by)
+
         self.by = by
         
         # Separate the matrix into two groups: indices and values
         aux = np.full(self.arr.shape[1], True)
         aux[by] = False
-        self.val_cols = np.nonzero(aux)
+        self.val_cols = np.nonzero(aux)[0]
         
         self.idx = self.arr[:, self.by]
         self.vals = self.arr[:, self.val_cols]
@@ -74,30 +74,30 @@ class GroupBy:
         # self.gr_vals_list = None
     
 
-    def get_group(self, idx):
-        """
-            Return a list of all groups (idx, vals). Can also only return values in group
+    # def get_group(self, idx):
+    #     """
+    #         Return a list of all groups (idx, vals). Can also only return values in group
             
-            Parameters
-            ----------
-            only_vals : optional, False
-                Only return groups of values instead of (idx, vals). 
+    #         Parameters
+    #         ----------
+    #         only_vals : optional, False
+    #             Only return groups of values instead of (idx, vals). 
             
-            Returns
-            -------
-            groups : list
-                A list of 2d arrays representing each group
-        """
-        if only_vals:
-            if self.gr_vals_list is None:
-                self.gr_vals_list = [
-                    self.vals[self.gr_idx[i]:self.gr_idx[i+1]] for i in range(self.gr_idx.shape[0] - 1)
-                ]
-                return self.gr_vals_list
-            else:
-                return self.gr_vals_list
+    #         Returns
+    #         -------
+    #         groups : list
+    #             A list of 2d arrays representing each group
+    #     """
+    #     if only_vals:
+    #         if self.gr_vals_list is None:
+    #             self.gr_vals_list = [
+    #                 self.vals[self.gr_idx[i]:self.gr_idx[i+1]] for i in range(self.gr_idx.shape[0] - 1)
+    #             ]
+    #             return self.gr_vals_list
+    #         else:
+    #             return self.gr_vals_list
             
-        return [self.arr[self.gr_idx[i]:self.gr_idx[i+1]] for i in range(self.gr_idx.shape[0] - 1)]
+    #     return [self.arr[self.gr_idx[i]:self.gr_idx[i+1]] for i in range(self.gr_idx.shape[0] - 1)]
 
     
     # def apply(self, fnc):
@@ -152,11 +152,3 @@ class GroupBy:
         f = np.array([self.fmap[fncs[i]] for i in range(self.arr.shape[1])])
 
         return _agg_grps(ar=self.arr, f=f, gr_idx=self.gr_idx, gr_n=self.keys.shape[0], col_n=self.arr.shape[1])
-
-        # res = np.empty(shape=(self.keys.shape[0], self.arr.shape[1]), dtype=np.float32)
-    
-        # for ri in range(self.gr_idx.shape[0] - 1):
-        #     grar = self.arr[self.gr_idx[ri]:self.gr_idx[ri+1]]
-        #     res[ri] = np.array([self._agg_col(grar[:, ci], f[ci]) for ci in range(self.arr.shape[1])])
-        # return res
-
