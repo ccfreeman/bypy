@@ -39,6 +39,7 @@ class Merge:
         intersect, l_idx, r_idx = np.intersect1d(l_keyv, r_keyv, 
                                                  assume_unique=True, return_indices=True)
 
+        # The creation of the return array is spedup with numba no-python mode
         if jitted:
             res = _inner_merge_jit(idx=self.l_gb.idx, l_vals=self.l_gb.vals, r_vals=self.r_gb.vals, 
                                     n_intersect=intersect.shape[0], l_gr_idx=self.l_gb.gr_idx,
