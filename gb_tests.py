@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
         print("ByPy groupby, {0}x{1}, by {2}, {3} repetitions...".format(n, m, by_idx[ii], n_reps))
         for i in trange(n_reps):
-            GroupBy(ar, by=by_idx[ii]) #[GroupBy(ar, by=[0,1]) for i in trange(1000)]
+            GroupBy(ar, by=by_idx[ii]) 
 
         print("Pandas groupby...")
         for i in trange(n_reps):
